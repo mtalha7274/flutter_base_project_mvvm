@@ -2,6 +2,8 @@ import 'languages/language.dart';
 import 'languages/language_config.dart';
 
 class Config {
+  static const bool debug = true;
+
 // Languages
   static const String english = 'english';
 

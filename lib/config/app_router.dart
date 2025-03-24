@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppRouter {
-  static Future<void> push(BuildContext context, Widget widget) {
-    return Navigator.push(
+  static Future<T?> push<T extends Object?>(
+      BuildContext context, Widget widget) async {
+    return await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => widget),
     );
@@ -15,7 +16,16 @@ class AppRouter {
     );
   }
 
-  static void pop(BuildContext context) {
-    Navigator.pop(context);
+  static Future<void> pushAndRemoveUntil(BuildContext context, Widget widget) {
+    return Navigator.pushAndRemoveUntil(context,
+        MaterialPageRoute(builder: (context) => widget), (route) => false);
+  }
+
+  static void pop<T extends Object?>(BuildContext context, [T? result]) {
+    Navigator.pop(context, result);
+  }
+
+  static bool canPop(BuildContext context) {
+    return Navigator.canPop(context);
   }
 }

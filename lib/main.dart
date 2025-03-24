@@ -15,7 +15,7 @@ import 'views/splash.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
-  switchToPortraitMode();
+  await switchToPortraitMode();
   try {
     await EasyLocalization.ensureInitialized();
     runApp(EasyLocalization(
