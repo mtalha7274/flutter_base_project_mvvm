@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:provider/provider.dart';
 
@@ -13,7 +14,24 @@ import 'viewmodels/language_provider.dart';
 import 'viewmodels/theme_provider.dart';
 import 'views/splash.dart';
 
+final navigatorKey = GlobalKey<NavigatorState>();
+
+Future<bool> _loadEnv() async {
+  try {
+    await dotenv.load(fileName: ".env");
+    return true;
+  } catch (e) {
+    debugPrint(e.toString());
+    return false;
+  }
+}
+
 void main() async {
+  if (!await _loadEnv()) {
+    throw Exception(
+        "Failed to load environment variables, please create .env file at project level and add DEBUG=true");
+  }
+
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDependencies();
   await switchToPortraitMode();
@@ -60,6 +78,7 @@ class _BaseAppState extends State<BaseApp> {
     final themeProvider = context.watch<ThemeProvider>();
     return FlavorBanner(
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
         localizationsDelegates: context.localizationDelegates,
         supportedLocales: context.supportedLocales,

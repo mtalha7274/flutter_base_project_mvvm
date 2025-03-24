@@ -1,8 +1,10 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+
 import 'languages/language.dart';
 import 'languages/language_config.dart';
 
 class Config {
-  static const bool debug = true;
+  static final bool debug = dotenv.env['DEBUG'] == 'true';
 
 // Languages
   static const String english = 'english';
