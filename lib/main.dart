@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:provider/provider.dart';
 
 import 'config/config.dart';
@@ -17,6 +18,9 @@ void main() async {
   await initializeDependencies();
   await switchToPortraitMode();
   try {
+    if (Config.debug) {
+      FlavorConfig(name: "DEBUG", location: BannerLocation.topEnd);
+    }
     await EasyLocalization.ensureInitialized();
     runApp(EasyLocalization(
         assetLoader: CsvAssetLoader(),
@@ -53,15 +57,17 @@ class BaseApp extends StatefulWidget {
 class _BaseAppState extends State<BaseApp> {
   @override
   Widget build(BuildContext context) {
-    final themeProvider = context.read<ThemeProvider>();
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
-      color: themeProvider.baseTheme.primary,
-      theme: themeProvider.baseTheme.themeData,
-      home: const Splash(),
+    final themeProvider = context.watch<ThemeProvider>();
+    return FlavorBanner(
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: context.localizationDelegates,
+        supportedLocales: context.supportedLocales,
+        locale: context.locale,
+        color: themeProvider.baseTheme.primary,
+        theme: themeProvider.baseTheme.themeData,
+        home: const Splash(),
+      ),
     );
   }
 }

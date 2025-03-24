@@ -7,7 +7,7 @@ class ThemeRepo {
   ThemeRepo(this._manager);
 
   String getTheme() {
-    return _manager.getString(key: AppConstants.theme) ?? Config.dark;
+    return _manager.getString(key: AppConstants.theme) ?? Config.defaultTheme;
   }
 
   Future<void> setTheme({required String theme}) async {
