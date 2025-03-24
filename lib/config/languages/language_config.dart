@@ -14,7 +14,7 @@ class LanguageConfig {
 
   // Locales
   static const Map<String, Locale> _locales = {
-    Config.english: Locale('en_US'),
+    Config.english: Locale('en', 'US'),
   };
 
   // Labels
