@@ -6,3 +6,9 @@ newVersionTitle,New Version Available!
 newVersionDescription,A new version of this app is available. Please click on the update button to update to new version of this app.
 update,Update
 skip,Skip
+watchAd,Watch Ad
+watchAdDescription,Watch a short ad to unlock this feature.
+watchAdDescription1,The share button will be enabled only after you watch an ad.
+watchAdDescription2,The file will be saved in your downloads folder after you watch an ad.
+continueButton,Continue
+cancel,Cancel
