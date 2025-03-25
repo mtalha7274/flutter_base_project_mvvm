@@ -1,10 +1,19 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'core/constants/app_constants.dart';
+import 'core/services/firebase_remote_config.dart';
 import 'data/managers/local/local_storage.dart';
 import 'data/managers/local/shared_preference.dart';
-import 'data/repositories/language.dart';
-import 'data/repositories/theme.dart';
+import 'data/managers/remote/api_manager.dart';
+import 'data/managers/remote/api_manager_impl.dart';
+import 'data/repositories/local/language.dart';
+import 'data/repositories/local/theme.dart';
+import 'models/settings.dart';
 import 'viewmodels/language_provider.dart';
 import 'viewmodels/theme_provider.dart';
 
@@ -14,6 +23,28 @@ Future<void> initializeDependencies() async {
   // Initialize
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerSingleton<SharedPreferences>(sharedPreferences);
+
+  final packageInfo = await PackageInfo.fromPlatform();
+  sl.registerSingleton<PackageInfo>(packageInfo);
+
+  DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  final DeviceData deviceName = DeviceData(
+      Platform.isAndroid
+          ? (await deviceInfo.androidInfo).model
+          : (await deviceInfo.iosInfo).utsname.machine,
+      Platform.isAndroid
+          ? (await deviceInfo.androidInfo).version.release
+          : (await deviceInfo.iosInfo).systemVersion);
+  sl.registerSingleton<DeviceData>(deviceName);
+
+  final firebaseRemoteConfigService =
+      await FirebaseRemoteConfigService().init();
+  sl.registerSingleton<FirebaseRemoteConfigService>(
+      firebaseRemoteConfigService);
+
+  // Managers
+  sl.registerSingleton<ApiManager>(ApiManagerImpl(AppConstants.countryUrl),
+      instanceName: AppConstants.countryUrl);
 
   // Register Dependencies
   sl.registerSingleton<LocalStorageManager>(

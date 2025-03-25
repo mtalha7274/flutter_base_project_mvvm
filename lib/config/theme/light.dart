@@ -11,6 +11,8 @@ class LightTheme implements BaseTheme {
   @override
   final Color background = const Color(0xFFcce4f5);
   @override
+  final Color surface = const Color(0xFFcce4f5);
+  @override
   final Color secondaryBackground = const Color(0xFFffffff);
   @override
   final Color icon = const Color(0xFF000000);

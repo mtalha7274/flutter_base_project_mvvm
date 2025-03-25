@@ -1,4 +1,16 @@
 class AppConstants {
+  // Firebase
+  static const String requiredMinimumVersion = 'requiredMinimumVersion';
+  static const String recommendedMinimumVersion = 'recommendedMinimumVersion';
+  static const String requiredMinimumVersionAndroid =
+      'requiredMinimumVersionAndroid';
+  static const String recommendedMinimumVersionAndroid =
+      'recommendedMinimumVersionAndroid';
+  static const String requiredMinimumVersionDebug =
+      'requiredMinimumVersionDebug';
+  static const String recommendedMinimumVersionDebug =
+      'recommendedMinimumVersionDebug';
+
   // FontSize
   static const double font2Px = 2.0;
   static const double font4Px = 4.0;
@@ -31,6 +43,19 @@ class AppConstants {
   // Local Storage keys
   static const String theme = 'theme';
   static const String language = 'language';
+  static const String skippedVersion = 'skippedVersion';
+
+  // App Links
+  static const String countryUrl = "http://ip-api.com";
+  static const String bundleId = '';
+  static const String appleId = '';
+  static const String appPlaystoreUrl =
+      'https://play.google.com/store/apps/details?id=$bundleId';
+  static const String appAppstoreUrl = 'https://apps.apple.com/app/id$appleId';
+  static const String privacyPolicyUrl = '';
+  static const String termsOfUseUrl = '';
+  static const String contactUsEmail = '';
+  static const String emailScheme = 'mailto';
 
   // Other Constants
 }

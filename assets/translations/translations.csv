@@ -1,1 +1,8 @@
 key,en_US
+noInternet,No internet
+serverError,Server error
+invalidResponse,Invalid response
+newVersionTitle,New Version Available!
+newVersionDescription,A new version of this app is available. Please click on the update button to update to new version of this app.
+update,Update
+skip,Skip

@@ -1,6 +1,11 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_localization_loader/easy_localization_loader.dart';
+import 'package:flutter_base_project_mvvm/firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
 import 'package:provider/provider.dart';
@@ -26,6 +31,18 @@ Future<bool> _loadEnv() async {
   }
 }
 
+void initializeCrashlytics() {
+  if (!Config.debug) {
+    FlutterError.onError = (errorDetails) {
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+    };
+    PlatformDispatcher.instance.onError = (error, stack) {
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      return true;
+    };
+  }
+}
+
 void main() async {
   if (!await _loadEnv()) {
     throw Exception(
@@ -33,6 +50,10 @@ void main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
+  // TODO: Use flutterfire cli to generate firebase options
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  initializeCrashlytics();
+
   await initializeDependencies();
   await switchToPortraitMode();
   try {

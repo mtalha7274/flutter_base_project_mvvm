@@ -4,7 +4,7 @@ import '../config/config.dart';
 import '../config/theme/base.dart';
 import '../config/theme/dark.dart';
 import '../config/theme/light.dart';
-import '../data/repositories/theme.dart';
+import '../data/repositories/local/theme.dart';
 
 class ThemeProvider with ChangeNotifier {
   late BaseTheme baseTheme;

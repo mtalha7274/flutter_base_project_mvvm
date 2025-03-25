@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import '../../config/config.dart';
-import '../../config/languages/language.dart';
-import '../../core/constants/app_constants.dart';
-import '../managers/local/local_storage.dart';
+import '../../../config/config.dart';
+import '../../../config/languages/language.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../managers/local/local_storage.dart';
 
 class LanguageRepo {
   final LocalStorageManager _manager;

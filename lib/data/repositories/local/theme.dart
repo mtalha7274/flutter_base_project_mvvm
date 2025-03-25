@@ -1,6 +1,6 @@
-import '../../config/config.dart';
-import '../../core/constants/app_constants.dart';
-import '../managers/local/local_storage.dart';
+import '../../../config/config.dart';
+import '../../../core/constants/app_constants.dart';
+import '../../managers/local/local_storage.dart';
 
 class ThemeRepo {
   late final LocalStorageManager _manager;
