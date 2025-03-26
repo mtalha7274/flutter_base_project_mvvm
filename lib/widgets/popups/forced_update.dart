@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../config/app_router.dart';
+import '../../config/config.dart';
 import '../../core/constants/app_constants.dart';
 import '../../core/constants/view_constants.dart';
 import '../../core/services/firebase_remote_config.dart';
@@ -129,9 +130,8 @@ class _ForcedUpdateState extends State<ForcedUpdate> {
   }
 
   void onUpdate() async {
-    final url = Platform.isAndroid
-        ? AppConstants.appPlaystoreUrl
-        : AppConstants.appAppstoreUrl;
+    final url =
+        Platform.isAndroid ? Config.appPlaystoreUrl : Config.appAppstoreUrl;
     try {
       await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } catch (e) {

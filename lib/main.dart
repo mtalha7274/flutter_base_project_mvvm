@@ -16,6 +16,8 @@ import 'core/constants/app_assets.dart';
 import 'core/utils/device_orientation.dart';
 import 'injection_container.dart';
 import 'viewmodels/language_provider.dart';
+import 'viewmodels/providers/custom_modal_progress_hud.dart';
+import 'viewmodels/providers/info_provider.dart';
 import 'viewmodels/theme_provider.dart';
 import 'views/splash.dart';
 
@@ -50,7 +52,7 @@ void main() async {
   }
 
   WidgetsFlutterBinding.ensureInitialized();
-  // TODO: Use flutterfire cli to generate firebase options
+  // TODO: Use flutterfire cli for firebase setup and override current implementations
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   initializeCrashlytics();
 
@@ -80,6 +82,9 @@ class MainApp extends StatelessWidget {
     return MultiProvider(providers: [
       ChangeNotifierProvider<ThemeProvider>(create: (_) => sl()),
       ChangeNotifierProvider<LanguageProvider>(create: (_) => sl()),
+      ChangeNotifierProvider<CustomModalProgressHudProvider>(
+          create: (_) => sl()),
+      ChangeNotifierProvider<InfoProvider>(create: (_) => sl(), lazy: false),
     ], child: const BaseApp());
   }
 }

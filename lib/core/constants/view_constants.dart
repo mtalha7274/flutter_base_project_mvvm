@@ -15,4 +15,13 @@ class ViewConstants {
   static const String watchAdDescription2 = 'watchAdDescription2';
   static const String continueButton = 'continueButton';
   static const String cancel = 'cancel';
+  static const String privacyPolicy = "privacyPolicy";
+  static const String termsAndConditions = "termsAndConditions";
+  static const String rateApp = "rateApp";
+  static const String shareApp = "shareApp";
+  static const String contactUs = "contactUs";
+  static const String settings = "settings";
+  static const String home = "home";
+  static const String search = "search";
+  static const String more = "more";
 }

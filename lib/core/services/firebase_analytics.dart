@@ -5,7 +5,7 @@ import 'package:flutter_base_project_mvvm/core/extensions/string.dart';
 class AppAnalytics {
   static void logScreenEvent(Screens screen) async {
     try {
-      FirebaseAnalytics.instance.logScreenView(
+      await FirebaseAnalytics.instance.logScreenView(
           screenName: screen.name.capitalizeFirst(),
           screenClass: screenClass[screen.name]);
     } catch (e) {

@@ -5,14 +5,14 @@ class AppAssets {
 
   // Icons
   static const String _icons = "assets/icons";
-  static const String dialer = "$_icons/dialer.svg";
-  static const String lockHandle = "$_icons/lockHandle.svg";
-  static const String lockBody = "$_icons/lockBody.svg";
-  static const String splash = "$_icons/splash.svg";
-  static const String settings = "$_icons/settings.svg";
-  static const String turnRightArrow = "$_icons/turnRightArrow.svg";
-  static const String turnLeftArrow = "$_icons/turnLeftArrow.svg";
-  static const String combinationSuccess = "$_icons/combinationSuccess.svg";
-  static const String lock = "$_icons/lock.svg";
-  static const String close = "$_icons/close.svg";
+  static const String more = "$_icons/more.svg";
+  static const String privacyPolicy = "$_icons/privacyPolicy.svg";
+  static const String termsAndConditions = "$_icons/termsAndConditions.svg";
+  static const String rateApp = "$_icons/rateApp.svg";
+  static const String shareApp = "$_icons/shareApp.svg";
+  static const String contactUs = "$_icons/contactUs.svg";
+  static const String sun = "$_icons/sun.svg";
+  static const String moon = "$_icons/moon.svg";
+  static const String home = "$_icons/home.svg";
+  static const String search = "$_icons/search.svg";
 }

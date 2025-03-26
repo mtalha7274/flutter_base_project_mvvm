@@ -13,8 +13,11 @@ import 'data/managers/remote/api_manager.dart';
 import 'data/managers/remote/api_manager_impl.dart';
 import 'data/repositories/local/language.dart';
 import 'data/repositories/local/theme.dart';
+import 'data/repositories/remote/settings/country.dart';
 import 'models/settings.dart';
 import 'viewmodels/language_provider.dart';
+import 'viewmodels/providers/custom_modal_progress_hud.dart';
+import 'viewmodels/providers/info_provider.dart';
 import 'viewmodels/theme_provider.dart';
 
 final sl = GetIt.instance;
@@ -50,11 +53,18 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<LocalStorageManager>(
       SharedPreferenceManager(sl<SharedPreferences>()));
 
+  // Repositories
   sl.registerSingleton<ThemeRepo>(ThemeRepo(sl<LocalStorageManager>()));
   sl.registerSingleton<LanguageRepo>(LanguageRepo(sl<LocalStorageManager>()));
+  sl.registerSingleton<CountryRepo>(
+      CountryRepo(sl<ApiManager>(instanceName: AppConstants.countryUrl)));
 
   // Providers
   sl.registerFactory<ThemeProvider>(() => ThemeProvider(sl<ThemeRepo>()));
   sl.registerFactory<LanguageProvider>(
       () => LanguageProvider(sl<LanguageRepo>()));
+  sl.registerFactory<CustomModalProgressHudProvider>(
+      () => CustomModalProgressHudProvider());
+  sl.registerFactory<InfoProvider>(
+      () => InfoProvider(sl<CountryRepo>(), sl<LocalStorageManager>()));
 }

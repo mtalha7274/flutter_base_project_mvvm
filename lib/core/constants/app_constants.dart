@@ -47,14 +47,6 @@ class AppConstants {
 
   // App Links
   static const String countryUrl = "http://ip-api.com";
-  static const String bundleId = '';
-  static const String appleId = '';
-  static const String appPlaystoreUrl =
-      'https://play.google.com/store/apps/details?id=$bundleId';
-  static const String appAppstoreUrl = 'https://apps.apple.com/app/id$appleId';
-  static const String privacyPolicyUrl = '';
-  static const String termsOfUseUrl = '';
-  static const String contactUsEmail = '';
   static const String emailScheme = 'mailto';
 
   // Other Constants
