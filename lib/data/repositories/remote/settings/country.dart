@@ -1,3 +1,4 @@
+import '../../../../core/resources/data_state.dart';
 import '../../../../core/resources/error_handler.dart';
 import '../../../managers/remote/api_manager.dart';
 
@@ -5,7 +6,7 @@ class CountryRepo {
   final ApiManager _apiManager;
   CountryRepo(this._apiManager);
 
-  Future<String?> getCountry() async {
+  Future<DataState<String>> getCountry() async {
     final dataState = await ErrorHandler.onNetworkRequest<String>(
       fetch: () async {
         final response = await _apiManager.get('/json',
@@ -14,6 +15,6 @@ class CountryRepo {
         return country;
       },
     );
-    return dataState.data;
+    return dataState;
   }
 }

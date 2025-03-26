@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_base_project_mvvm/core/resources/data_state.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../../core/constants/app_constants.dart';
@@ -28,8 +29,10 @@ class InfoProvider with ChangeNotifier {
   }
 
   void _fetchAndSetCountryInfo() async {
-    final country = await _countryRepo.getCountry();
-    deviceInfo?.country = country;
+    final dataState = await _countryRepo.getCountry();
+    if (dataState is DataSuccess) {
+      deviceInfo?.country = dataState.data;
+    }
   }
 
   String? get skippedVersion =>

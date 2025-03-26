@@ -25,10 +25,11 @@ class CustomBottomNavigationBar extends StatefulWidget {
 class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar>
     with TickerProviderStateMixin {
   int _selectedIndex = 0;
+  final int _numberOfItems = 3;
   final _animationDuration = const Duration(milliseconds: 150);
 
   late final List<AnimationController> _animationControllers = List.generate(
-      4,
+      _numberOfItems,
       (index) =>
           AnimationController(vsync: this, duration: _animationDuration));
 
