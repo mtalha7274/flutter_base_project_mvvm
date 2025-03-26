@@ -91,6 +91,7 @@ class ApiManagerImpl extends ApiManager {
       dynamic errorMessage;
       try {
         final decoded = jsonDecode(response.body);
+        // TODO: Add error message from server
         errorMessage = decoded['msg'] ?? decoded['error'];
       } catch (e, s) {
         _handleInvalidResponseException(
