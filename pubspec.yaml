@@ -1,10 +1,10 @@
 name: flutter_base_project_mvvm
 description: "A new Flutter project."
 publish_to: 'none'
-version: 0.1.0
+version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ^3.6.0
 
 dependencies:
   flutter:
@@ -36,6 +36,12 @@ dependencies:
   google_mobile_ads: ^5.3.1
   share_plus: ^10.1.4
   flutter_animate: ^4.5.2
+  camera: ^0.11.1
+  image_picker: ^1.1.2
+  path: ^1.9.0
+  image: ^4.5.4
+  flutter_image_compress: ^2.4.0
+  image_cropper: ^9.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,4 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 dynamic showModalSheet({
   required BuildContext context,
@@ -22,4 +24,8 @@ dynamic showModalSheet({
       clipBehavior: Clip.hardEdge,
       builder: (context) => content);
   return result;
+}
+
+void showToast(String message) {
+  Fluttertoast.showToast(msg: message.tr());
 }
