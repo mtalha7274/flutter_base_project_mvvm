@@ -2,10 +2,10 @@ import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:logger/logger.dart';
 
-import '../../data/managers/remote/api_manager_impl.dart';
+import '../../main.dart';
 import '../constants/view_constants.dart';
+import 'custom_exceptions.dart';
 import 'data_state.dart';
 
 class ErrorHandler {
@@ -33,7 +33,7 @@ class ErrorHandler {
 
       final response = await fetch() as T;
       return DataSuccess<T>(response);
-    } on HttpRequestException catch (e, s) {
+    } on RestfulRequestException catch (e, s) {
       final errorMessage = e.message;
       _showErrorInConsole(
           referrence: referrence, error: e.error, stackTrace: s);
@@ -60,6 +60,6 @@ class ErrorHandler {
     error,
     stackTrace,
   }) {
-    Logger().e(referrence, error: error, stackTrace: stackTrace);
+    logger.e(referrence, error: error, stackTrace: stackTrace);
   }
 }
