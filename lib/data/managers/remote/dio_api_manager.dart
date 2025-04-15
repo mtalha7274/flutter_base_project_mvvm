@@ -1,11 +1,13 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../core/constants/view_constants.dart';
 import '../../../core/resources/custom_exceptions.dart';
+import '../../../core/resources/interceptors/retry_on_disconnect.dart';
 import 'api_manager.dart';
 
 class DioApiManager extends ApiManager {
@@ -13,7 +15,10 @@ class DioApiManager extends ApiManager {
   final String baseUrl;
   final Dio _dio = Dio();
 
-  DioApiManager(this.baseUrl);
+  DioApiManager(this.baseUrl) {
+    _dio.interceptors.add(
+        RetryOnDisconnectInterceptor(dio: _dio, connectivity: Connectivity()));
+  }
 
   @override
   Future<dynamic> get(String endpoint, {Map<String, String>? headers}) async {

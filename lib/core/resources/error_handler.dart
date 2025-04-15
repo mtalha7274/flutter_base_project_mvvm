@@ -1,10 +1,6 @@
 import 'dart:async';
 
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:easy_localization/easy_localization.dart';
-
 import '../../main.dart';
-import '../constants/view_constants.dart';
 import 'custom_exceptions.dart';
 import 'data_state.dart';
 
@@ -15,17 +11,6 @@ class ErrorHandler {
     FutureOr<T> Function(dynamic)? serialize,
   }) async {
     try {
-      final connectivityResult = await (Connectivity().checkConnectivity());
-      if (!(connectivityResult.contains(ConnectivityResult.mobile) ||
-          connectivityResult.contains(ConnectivityResult.wifi) ||
-          connectivityResult.contains(ConnectivityResult.ethernet) ||
-          connectivityResult.contains(ConnectivityResult.vpn))) {
-        final error = ViewConstants.noInternet.tr();
-        _showErrorInConsole(
-            referrence: referrence, error: error, stackTrace: StackTrace.empty);
-        return DataFailed(error);
-      }
-
       if (serialize != null) {
         final response = await fetch();
         return DataSuccess<T>(await serialize(response));
