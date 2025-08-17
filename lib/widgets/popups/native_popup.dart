@@ -23,6 +23,7 @@ Future<void> showNativePopup(
     builder: (context) => AlertDialog.adaptive(
       title: TranslatedText(title),
       content: TranslatedText(description),
+      backgroundColor: themeProvider.baseTheme.background,
       actions: [
         adaptiveAction(
             context, secondaryActionTitle, secondaryAction, themeProvider),
