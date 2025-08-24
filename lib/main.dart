@@ -29,6 +29,7 @@ import 'views/homepage.dart';
 import 'views/search.dart';
 import 'views/settings.dart';
 import 'widgets/custom_modal_progress_hud.dart';
+import 'core/utils/helpers.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription> cameras;
@@ -39,7 +40,7 @@ Future<bool> _loadEnv() async {
     await dotenv.load(fileName: ".env");
     return true;
   } catch (e) {
-    debugPrint(e.toString());
+    printLog(e.toString());
     return false;
   }
 }
@@ -71,7 +72,7 @@ void main() async {
       initializeCrashlytics();
     }
   } catch (e) {
-    debugPrint('Firebase initialization failed: $e');
+    printLog('Firebase initialization failed: $e');
   }
 
   await initializeDependencies();
@@ -79,7 +80,7 @@ void main() async {
   try {
     cameras = await availableCameras();
   } catch (e) {
-    debugPrint('Camera initialization failed: $e');
+    printLog('Camera initialization failed: $e');
     cameras = [];
   }
   try {
@@ -94,7 +95,7 @@ void main() async {
         supportedLocales: LanguageConfig.locales,
         child: const MainApp()));
   } catch (e) {
-    debugPrint(e.toString());
+    printLog(e.toString());
   }
 }
 

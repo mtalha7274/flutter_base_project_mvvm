@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:camera/camera.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import '../../core/utils/helpers.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../core/constants/view_constants.dart';
@@ -52,7 +53,7 @@ mixin ImagePickerMixin {
         }
       });
     } catch (e) {
-      debugPrint('Camera controller initialization failed: $e');
+      printLog('Camera controller initialization failed: $e');
       WidgetsBinding.instance.addPostFrameCallback((_) {
         showToast(ViewConstants.errorOpeningCamera);
         Navigator.pop(context);

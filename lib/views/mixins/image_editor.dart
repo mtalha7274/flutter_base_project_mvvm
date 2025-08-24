@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import '../../core/utils/helpers.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:path/path.dart' as path;
@@ -63,7 +63,7 @@ mixin ImageEditorMixin {
     final originalImage = img.decodeImage(imageBytes);
 
     if (originalImage == null) {
-      debugPrint('Failed to decode image.');
+      printLog('Failed to decode image.');
       return null;
     }
 
@@ -71,7 +71,7 @@ mixin ImageEditorMixin {
     final originalHeight = originalImage.height;
     final longerSide =
         originalWidth > originalHeight ? originalWidth : originalHeight;
-    debugPrint('Original width: $originalWidth, height: $originalHeight');
+    printLog('Original width: $originalWidth, height: $originalHeight');
 
     double scaleFactor;
     if (longerSide >= 4000) {
@@ -88,7 +88,7 @@ mixin ImageEditorMixin {
 
     final scaledWidth = (originalWidth / scaleFactor).round();
     final scaledHeight = (originalHeight / scaleFactor).round();
-    debugPrint('Scaled width: $scaledWidth, height: $scaledHeight');
+    printLog('Scaled width: $scaledWidth, height: $scaledHeight');
 
     var result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
@@ -101,13 +101,13 @@ mixin ImageEditorMixin {
     final originalSize = file.lengthSync();
     final compressedSize = await result?.length() ?? 0;
 
-    debugPrint(
+    printLog(
         'Original size: ${(originalSize / (1024 * 1024)).toStringAsFixed(2)}MB');
-    debugPrint(
+    printLog(
         'Compressed size: ${(compressedSize / (1024 * 1024)).toStringAsFixed(2)}MB');
 
     if (compressedSize >= originalSize) {
-      debugPrint('Compression equal or greater than original size');
+      printLog('Compression equal or greater than original size');
       return XFile(file.path);
     }
 
