@@ -1,9 +1,10 @@
 import 'dart:async';
 
+import 'package:api_repo/data/managers/cache_policy.dart';
+import 'package:api_repo/data/repos/api_repo.dart';
+
 import '../../../../core/resources/data_state.dart';
-import '../../../managers/cache_policy.dart';
 import '../../../managers/remote/api_manager.dart';
-import '../../api.dart';
 
 class CountryRepo with ApiRepo {
   final ApiManager _apiManager;
