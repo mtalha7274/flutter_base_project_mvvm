@@ -15,14 +15,9 @@ class CountryRepo with ApiRepo {
     onRequest<String>(
       cachePolicy: CachePolicy.cacheThenNetwork,
       showLogs: true,
-      request: () async {
-        final response = await _apiManager.get(
-          '/json',
-          headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        );
-        return response['country'];
-      },
-      onData: (data, ResponseOrigin source) {
+      request: () async =>
+          (await _apiManager.get('/json'))['country'] as String,
+      onData: (String data, ResponseOrigin source) {
         if (!completer.isCompleted) {
           completer.complete(DataSuccess<String>(data));
         }

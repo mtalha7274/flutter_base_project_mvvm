@@ -36,7 +36,7 @@ mixin ImageEditorMixin {
 
       return croppedFile?.path;
     } catch (e) {
-      logger.e('Error cropping image: $e');
+      printLog('Error cropping image: $e');
     }
     return null;
   }
@@ -53,7 +53,7 @@ mixin ImageEditorMixin {
         return File(compressedXFile.path);
       }
     } catch (e) {
-      logger.e('Error compressing image: $e');
+      printLog('Error compressing image: $e');
     }
     return file;
   }

@@ -1,6 +1,7 @@
 import 'dart:async';
 
-import '../../main.dart';
+import 'package:flutter_base_project_mvvm/core/utils/helpers.dart';
+
 import 'custom_exceptions.dart';
 import 'data_state.dart';
 
@@ -49,7 +50,6 @@ class ErrorHandler {
   /// - A [DataSuccess<T>] containing the parsed result on success.
   /// - A [DataFailed] with an error message on failure.
   static Future<DataState<T>> onNetworkRequest<T>({
-    String? caller,
     required Future<dynamic> Function() fetch,
   }) async {
     try {
@@ -57,29 +57,28 @@ class ErrorHandler {
       return DataSuccess<T>(response);
     } on RestfulRequestException catch (e, s) {
       final errorMessage = e.message;
-      _showErrorInConsole(caller: caller, error: e.error, stackTrace: s);
+      _showErrorInConsole(error: e.error, stackTrace: s);
       return DataFailed(errorMessage);
     } on InvalidServerResponseException catch (e, s) {
       final errorMessage = e.message;
-      _showErrorInConsole(caller: caller, error: e.error, stackTrace: s);
+      _showErrorInConsole(error: e.error, stackTrace: s);
       return DataFailed(errorMessage);
     } on ErrorMessageFromServer catch (e, s) {
       final errorMessage = e.message;
-      _showErrorInConsole(caller: caller, error: errorMessage, stackTrace: s);
+      _showErrorInConsole(error: errorMessage, stackTrace: s);
       return DataFailed(errorMessage);
     } catch (e, s) {
       final error = e.toString();
-      _showErrorInConsole(caller: caller, error: error, stackTrace: s);
+      _showErrorInConsole(error: error, stackTrace: s);
       return DataFailed(error);
     }
   }
 
   /// Logs errors to the console with function context, error message, and stack trace.
   static void _showErrorInConsole<T>({
-    caller,
     error,
     stackTrace,
   }) {
-    logger.e(caller, error: error, stackTrace: stackTrace);
+    printLog('$error\n$stackTrace');
   }
 }

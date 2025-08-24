@@ -9,7 +9,6 @@ import 'package:easy_localization_loader/easy_localization_loader.dart';
 import 'package:flutter_base_project_mvvm/firebase_options.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_flavor/flutter_flavor.dart';
-import 'package:logger/logger.dart';
 import 'package:provider/provider.dart';
 
 import 'config/config.dart';
@@ -33,7 +32,6 @@ import 'core/utils/helpers.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription> cameras;
-final logger = Logger();
 
 Future<bool> _loadEnv() async {
   try {

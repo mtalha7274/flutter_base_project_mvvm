@@ -24,8 +24,8 @@ mixin ApiRepo {
   /// Auto refresh controllers
   final Map<String, Timer> _autoRefreshTimers = {};
 
-  /// How many times to retry API call
-  int maxRetries = 2;
+  /// How many times to retry API call. `null` means no retry by default.
+  int? maxRetries;
 
   /// Delay between retries
   Duration retryDelay = const Duration(seconds: 1);
@@ -35,6 +35,18 @@ mixin ApiRepo {
 
   /// Last API call timestamps (for rate-limiting)
   final Map<String, DateTime> _lastCallTimes = {};
+
+  /// Default auto refresh interval when not provided per-call. `null` disables auto-refresh.
+  Duration? defaultAutoRefreshInterval;
+
+  /// Default TTL for cache entries when not provided per-call. `null` means no auto-expiration.
+  Duration? defaultTtl;
+
+  /// Default cache policy when not provided per-call.
+  CachePolicy defaultCachePolicy = CachePolicy.cacheThenNetwork;
+
+  /// Default logging flag when not provided per-call.
+  bool defaultShowLogs = false;
 
   /// Makes a unified request that handles caching, optional serialization, timing, optional
   /// auto-refreshing, rate-limiting and graceful retry logic.
@@ -65,7 +77,9 @@ mixin ApiRepo {
   /// - *(Optional)* Duration to keep cached value fresh on disk. If null, the entry does not auto-expire.
   ///
   /// [maxRetries]
-  /// - *(Optional)* Number of retry attempts if the API call fails. Defaults to `2`.
+  /// - *(Optional)* Number of retry attempts if the API call fails.
+  /// - `null` (default) or `0` means no retry.
+  /// - Negative values are invalid and will throw.
   ///
   /// [retryDelay]
   /// - *(Optional)* Delay between retries. Increases linearly per attempt (i.e., 1s, 2s, 3s...).
@@ -97,19 +111,27 @@ mixin ApiRepo {
   void onRequest<T>({
     String? key,
     Duration? autoRefreshInterval,
-    required FutureOr<dynamic> Function() request,
+
+    /// The request must return the same type as `T` (e.g., String, Map, List, etc.)
+    required FutureOr<T> Function() request,
     required void Function(T data, ResponseOrigin origin) onData,
     Duration? ttl,
     int? maxRetries,
     Duration? retryDelay,
     int? rateLimitPerSecond,
-    CachePolicy cachePolicy = CachePolicy.cacheThenNetwork,
-    bool showLogs = false,
+    CachePolicy? cachePolicy,
+    bool? showLogs,
   }) {
     final callerFunctionName = _getCallerFunctionName();
     key = key ?? callerFunctionName;
 
-    if (showLogs) {
+    final bool effectiveShowLogs = showLogs ?? defaultShowLogs;
+    final Duration? effectiveAutoRefreshInterval =
+        autoRefreshInterval ?? defaultAutoRefreshInterval;
+    final Duration? effectiveTtl = ttl ?? defaultTtl;
+    final CachePolicy effectiveCachePolicy = cachePolicy ?? defaultCachePolicy;
+
+    if (effectiveShowLogs) {
       printLog('🔑 key: $key, caller: $callerFunctionName');
     }
 
@@ -117,15 +139,15 @@ mixin ApiRepo {
     unawaited(
       _request<T>(
         key,
-        autoRefreshInterval: autoRefreshInterval,
+        autoRefreshInterval: effectiveAutoRefreshInterval,
         request: request,
         onData: onData,
-        ttl: ttl,
+        ttl: effectiveTtl,
         maxRetriesOverride: maxRetries,
         retryDelayOverride: retryDelay,
         rateLimitPerSecondOverride: rateLimitPerSecond,
-        cachePolicy: cachePolicy,
-        showLogs: showLogs,
+        cachePolicy: effectiveCachePolicy,
+        showLogs: effectiveShowLogs,
       ),
     );
   }
@@ -133,7 +155,7 @@ mixin ApiRepo {
   /// Core request executor handling cache policies, retries, rate-limit and auto-refresh.
   Future<void> _request<T>(
     String key, {
-    required FutureOr<dynamic> Function() request,
+    required FutureOr<T> Function() request,
     required void Function(T data, ResponseOrigin origin) onData,
     Duration? autoRefreshInterval,
     Duration? ttl,
@@ -180,21 +202,26 @@ mixin ApiRepo {
         _lastCallTimes[key] = DateTime.now();
       }
 
-      final int retries = (maxRetriesOverride ?? maxRetries).clamp(0, 10);
+      final int? effectiveMaxRetries = maxRetriesOverride ?? maxRetries;
+      if (effectiveMaxRetries != null && effectiveMaxRetries < 0) {
+        throw ArgumentError(
+            'maxRetries cannot be negative. Received: $effectiveMaxRetries');
+      }
+      // `null` => no retry, treat as 0
+      final int retries = (effectiveMaxRetries ?? 0).clamp(0, 10);
       final Duration baseDelay = retryDelayOverride ?? retryDelay;
 
       int attempt = 0;
       while (true) {
         final sw = Stopwatch()..start();
         try {
-          final dynamic raw = await request();
+          final T raw = await request();
           sw.stop();
           if (showLogs) printLog('🌐 Network in ${sw.elapsedMs()}');
           // Cache raw response
           unawaited(_cacheManager.setCache(key: key, value: raw, ttl: ttl));
           // Cast for consumer
-          final T value = raw as T;
-          return value;
+          return raw;
         } catch (e) {
           sw.stop();
           if (attempt >= retries) {
@@ -261,7 +288,10 @@ mixin ApiRepo {
           unawaited(
             fetchNetwork().then((value) {
               if (value != null) onData(value, ResponseOrigin.network);
-            }).catchError((_) {}),
+            }).catchError((e) {
+              if (showLogs) printLog('⚠️  Network update failed: $e');
+              throw e;
+            }),
           );
           break;
       }
@@ -278,12 +308,13 @@ mixin ApiRepo {
             if (value != null) onData(value, ResponseOrigin.network);
           } catch (e) {
             if (showLogs) printLog('⚠️  Auto-refresh failed: $e');
+            rethrow;
           }
         });
       }
     } catch (e) {
-      // Intentionally swallow errors here since no error callback is defined.
       if (showLogs) printLog('⚠️  Request error: $e');
+      rethrow;
     }
   }
 

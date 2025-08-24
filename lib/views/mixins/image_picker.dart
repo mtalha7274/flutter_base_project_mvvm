@@ -46,7 +46,7 @@ mixin ImagePickerMixin {
           }
 
           WidgetsBinding.instance.addPostFrameCallback((_) {
-            logger.e(e);
+            printLog(e);
             showToast(errorMessage);
             Navigator.pop(context);
           });
@@ -73,7 +73,7 @@ mixin ImagePickerMixin {
       final XFile file = await cameraController.takePicture();
       await onImageCaptured?.call(file);
     } on CameraException catch (e) {
-      logger.e('Error capturing image: $e');
+      printLog('Error capturing image: $e');
     }
   }
 
@@ -87,7 +87,7 @@ mixin ImagePickerMixin {
         await onImagePicked?.call(image);
       }
     } catch (e) {
-      logger.e('Error picking image: $e');
+      printLog('Error picking image: $e');
     }
   }
 
